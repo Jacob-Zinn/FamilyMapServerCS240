@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp" >
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="reminder" />
+    <Spinner
+        android:id="@+id/dates"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/times" />
+    <Spinner
+        android:id="@id/times"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_alignParentRight="true" />
+    <Button
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/times"
+        android:layout_alignParentRight="true"
+        android:text="done"
+        android:backgroundTint="#ff0000"
+        android:onClick="doneBtnClicked"
+        android:id="@+id/doneBtn"/>
+    <Button
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/doneBtn"
+        android:layout_alignParentRight="true"
+        android:text="setInJava"
+        android:backgroundTint="#ff0000"
+        android:id="@+id/setInJavaBtn"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/randomText"
+        android:text="I'm yours"
+        android:textSize="25dp"
+        android:layout_below="@+id/doneBtn"
+        android:gravity="center"
+        android:layout_marginTop="100dp"
+        android:textAllCaps="true"
+        android:textColor="#000000"/>
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is the worst"
+        android:checked="true"
+        android:layout_below="@id/randomText"
+        android:id="@+id/checkOne"/>
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is the worst"
+        android:checked="true"
+        android:layout_below="@id/checkOne"
+        android:id="@+id/checkTwo"/>
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is the worst"
+        android:checked="true"
+        android:id="@+id/checkThree"
+        android:layout_below="@id/checkTwo"/>
+
+</RelativeLayout>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">booklibrary</string>
+
+    <array name="countries">
+        <item>Norway</item>
+        <item>Brazil</item>
+        <item>Germany</item>
+        <item>United States</item>
+        <item>Portugal</item>
+    </array>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/Android2019_11_Online-grocery-app" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Dagger-Examples" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Dagger-Hilt-Playerground" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/LITPro_MX" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MVIExample" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MVVMTodo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Open-API-Android-App" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/RestApiMVVM" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/android-mx-app" vcs="Git" />
+  </component>
+</project>

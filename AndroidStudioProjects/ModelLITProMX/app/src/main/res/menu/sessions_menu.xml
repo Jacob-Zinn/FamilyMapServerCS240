@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/gatedropAnalytics"
+        android:title="Gatedrop Analytics"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/twelveWeekTarget"
+        android:title="Show 12-Week Target"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/clearFilter"
+        android:title="Clear Filter"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/showHiddenSessions"
+        android:title="Show Hidden Sessions"
+        app:showAsAction="never" />
+</menu>
