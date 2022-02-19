@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Objects;
+
 /**
  * Token stored to authenticate user requests to database
  */
@@ -8,7 +10,7 @@ public class AuthToken {
     /**
      * unique token used for authentication
      */
-    private String authtoken;
+    private String authToken;
 
     /**
      * username associated with the authentication token
@@ -18,25 +20,33 @@ public class AuthToken {
     /**
      * constructor used to instantiated new AuthToken object with all params included
      *
-     * @param authtoken
+     * @param authToken
      * @param username
      */
-    public AuthToken(String authtoken, String username) {
-        this.authtoken=authtoken;
+    public AuthToken(String authToken, String username) {
+        this.authToken=authToken;
         this.username=username;
     }
 
-    /**
-     * default constructor for authToken. used for providing dummy data
-     */
-    public AuthToken(){};
-
-    public String getAuthtoken() {
-        return authtoken;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuthToken authToken=(AuthToken) o;
+        return Objects.equals(AuthToken.this.authToken, authToken.authToken) && Objects.equals(username, authToken.username);
     }
 
-    public void setAuthtoken(String authtoken) {
-        this.authtoken=authtoken;
+    @Override
+    public int hashCode() {
+        return Objects.hash(authToken, username);
+    }
+
+    public String getAuthtoken() {
+        return authToken;
+    }
+
+    public void setAuthtoken(String authToken) {
+        this.authToken=AuthToken.this.authToken;
     }
 
     public String getUsername() {

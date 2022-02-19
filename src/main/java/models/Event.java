@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Objects;
+
 /**
  * Events represent points in family history and contain info related to event
  */
@@ -79,6 +81,19 @@ public class Event {
      * Default constructor
      */
     public Event(){}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event=(Event) o;
+        return year == event.year && Objects.equals(eventID, event.eventID) && Objects.equals(associatedUsername, event.associatedUsername) && Objects.equals(personID, event.personID) && Objects.equals(latitude, event.latitude) && Objects.equals(longitude, event.longitude) && Objects.equals(country, event.country) && Objects.equals(city, event.city) && Objects.equals(eventType, event.eventType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(eventID, associatedUsername, personID, latitude, longitude, country, city, eventType, year);
+    }
 
     public String getEventID() {
         return eventID;

@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Objects;
+
 /**
  * a person in that contains relations to other persons in database containing family history
  */
@@ -15,7 +17,6 @@ public class Person {
     private String spouseID; // nullable
 
     /**
-     *
      * constructor used to instantiated new Person object with all params included
      *
      * @param personID
@@ -40,7 +41,6 @@ public class Person {
 
 
     /**
-     *
      * constructor used to instantiated new Person object with the nullable parameters excluded
      *
      * @param personID
@@ -60,7 +60,20 @@ public class Person {
     /**
      * Defualt Person constructor: used for providing dummy data
      */
-    public Person() {};
+    public Person() {}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person=(Person) o;
+        return Objects.equals(personID, person.personID) && Objects.equals(associatedUsername, person.associatedUsername) && Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName) && Objects.equals(gender, person.gender) && Objects.equals(fatherID, person.fatherID) && Objects.equals(motherID, person.motherID) && Objects.equals(spouseID, person.spouseID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(personID, associatedUsername, firstName, lastName, gender, fatherID, motherID, spouseID);
+    }
 
     public String getPersonID() {
         return personID;
