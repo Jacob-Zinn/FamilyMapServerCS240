@@ -70,7 +70,7 @@ public class PersonResult {
      * @param spouseID
      * @param success
      */
-    public PersonResult(String associatedUsername, String personID, String firstName, String lastName, String gender, String fatherID, String motherID, String spouseID, String message, Boolean success) {
+    public PersonResult(String associatedUsername, String personID, String firstName, String lastName, String gender, String fatherID, String motherID, String spouseID, Boolean success) {
         this.associatedUsername=associatedUsername;
         this.personID=personID;
         this.firstName=firstName;

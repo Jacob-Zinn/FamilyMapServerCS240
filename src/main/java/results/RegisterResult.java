@@ -40,7 +40,7 @@ public class RegisterResult {
      * @param personID
      * @param success
      */
-    public RegisterResult(String authToken, String username, String personID, String message, Boolean success) {
+    public RegisterResult(String authToken, String username, String personID, Boolean success) {
         this.authToken=authToken;
         this.username=username;
         this.personID=personID;

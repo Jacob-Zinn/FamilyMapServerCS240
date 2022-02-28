@@ -38,14 +38,12 @@ public class LoginResult {
      * @param authToken
      * @param username
      * @param personID
-     * @param message
      * @param success
      */
-    public LoginResult(String authToken, String username, String personID, String message, Boolean success) {
+    public LoginResult(String authToken, String username, String personID, Boolean success) {
         this.authToken=authToken;
         this.username=username;
         this.personID=personID;
-        this.message=message;
         this.success=success;
     }
 

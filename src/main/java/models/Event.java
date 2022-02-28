@@ -1,6 +1,9 @@
 package models;
 
+import util.Location;
+
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Events represent points in family history and contain info related to event
@@ -80,7 +83,44 @@ public class Event {
     /**
      * Default constructor
      */
-    public Event(){}
+    public Event() {
+    }
+
+    public static String generateEventID() {
+        return UUID.randomUUID().toString();
+    }
+
+    public static Event generateRandomEvent(Person person, int year, EventType eventType) {
+        Location randomLocation=Location.getRandomLocation();
+        return new Event(
+                generateEventID(),
+                person.getAssociatedUsername(),
+                person.getPersonID(),
+                randomLocation.getLat(),
+                randomLocation.getLon(),
+                randomLocation.getCountry(),
+                randomLocation.getCity(),
+                eventType.toString(),
+                year
+        );
+    }
+
+    public static Event generateSyncMarriageEvent(Person person, int year, Float lat, Float lon, String country, String city) {
+        return new Event(
+                generateEventID(),
+                person.getAssociatedUsername(),
+                person.getPersonID(),
+                lat,
+                lon,
+                country,
+                city,
+                EventType.marriage.toString(),
+                year
+        );
+    }
+
+
+    public enum EventType {death, birth, marriage}
 
     @Override
     public boolean equals(Object o) {

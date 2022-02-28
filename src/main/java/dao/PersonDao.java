@@ -77,6 +77,19 @@ public class PersonDao {
     }
 
     /**
+     * removes all entries from the person table associated to username
+     */
+    public void deleteEventsForUser(String username) throws DataAccessException {
+        String sql= "DELETE FROM person WHERE associatedUsername = ?;";
+        try (PreparedStatement stmt=conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.executeQuery();
+        } catch (SQLException e) {
+            throw new DataAccessException("SQL Error encountered while clearing entries for user");
+        }
+    }
+
+    /**
      * removes all entries from the person table
      */
     public void nukeTable() throws DataAccessException {

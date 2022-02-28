@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * root user whose information is used as data is extracted.

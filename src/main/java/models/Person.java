@@ -1,6 +1,10 @@
 package models;
 
+import util.ParentGenerationHelper;
+import util.Random;
+
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * a person in that contains relations to other persons in database containing family history
@@ -61,6 +65,52 @@ public class Person {
      * Defualt Person constructor: used for providing dummy data
      */
     public Person() {}
+
+    /**
+     * Uses
+     *
+     * @return
+     */
+
+
+    public static Person generateRandomPerson(String associatedUsername, Boolean isMale, String personID) {
+        String gender;
+        if (isMale) {gender = "m";} else {gender = "f";}
+        return new Person(
+                personID,
+                associatedUsername,
+                Random.getRandomFirstName(isMale),
+                Random.getRandomLastName(),
+                gender
+        );
+    }
+
+    public void generateParent(String associatedUsername, int generation, int targetNumGenerations, String personID, Boolean isFather, ParentGenerationHelper parentGenerationHelper, Event marriageEvent) {
+        // creating parent
+        Person person = generateRandomPerson(associatedUsername, isFather, personID);
+        parentGenerationHelper.addPerson(person);
+
+        // generate events
+        // TODO make these year values a range of values rather than set
+        parentGenerationHelper.addEvent(Event.generateRandomEvent(this, marriageEvent.getYear() - 20, Event.EventType.birth));
+        parentGenerationHelper.addEvent(Event.generateSyncMarriageEvent(this, marriageEvent.getYear(), marriageEvent.getLatitude(), marriageEvent.getLongitude(), marriageEvent.getCountry(), marriageEvent.getCity()));
+        parentGenerationHelper.addEvent(Event.generateRandomEvent(this, marriageEvent.getYear() + 70, Event.EventType.death));
+
+        if (generation <= targetNumGenerations) {
+            // linking parent and child
+            String newFatherID = Random.generateUUID();
+            String newMotherID = Random.generateUUID();
+            setFatherID(newFatherID);
+            setMotherID(newMotherID);
+
+            // mother father marriage sync
+            Event parentMarriageEvent = Event.generateRandomEvent(this, marriageEvent.getYear() + 20, Event.EventType.marriage);
+
+            // recursive
+            person.generateParent(associatedUsername, generation + 1, targetNumGenerations, newFatherID, true, parentGenerationHelper, parentMarriageEvent);
+            person.generateParent(associatedUsername, generation + 1, targetNumGenerations, newMotherID, false, parentGenerationHelper, parentMarriageEvent);
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
