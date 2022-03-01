@@ -91,7 +91,6 @@ public class ServerTest {
             up are set to the correct parameters.
         */
         proxy.clear(host, port);
-        System.out.println("are we here");
     }
 
     /**

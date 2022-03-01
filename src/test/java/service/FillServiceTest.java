@@ -1,5 +1,6 @@
 package service;
 
+import api.BadRequestException;
 import dao.PersonDao;
 import db.DataAccessException;
 import db.Database;
@@ -33,7 +34,7 @@ class FillServiceTest {
     Database db;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws BadRequestException {
         fillService = new FillService();
         clearService = new ClearService();
         clearService.clear();
@@ -45,7 +46,7 @@ class FillServiceTest {
     }
 
     @Test
-    void fill_pass_zeroGen() throws DataAccessException {
+    void fill_pass_zeroGen() throws DataAccessException, BadRequestException {
         FillResult fillResult = fillService.fill(new FillRequest("username", 0));
         assertTrue(fillResult.getMessage().length() > 0);
         assertTrue(fillResult.getSuccess());
@@ -60,7 +61,7 @@ class FillServiceTest {
     }
 
     @Test
-    void fill_pass_fourGen() throws DataAccessException {
+    void fill_pass_fourGen() throws DataAccessException, BadRequestException {
         FillResult fillResult = fillService.fill(new FillRequest("username", 4));
 
         assertTrue(fillResult.getMessage().length() > 0);
@@ -79,21 +80,16 @@ class FillServiceTest {
     }
 
     @Test
-    void fill_fail_invaidNumGenerations() {
-        FillResult fillResult = fillService.fill(new FillRequest("username", -1));
-
-        assertTrue(fillResult.getMessage().length() > 0);
-        assertFalse(fillResult.getSuccess());
+    void fill_fail_invaidNumGenerations() throws BadRequestException {
+        FillResult result = fillService.fill(new FillRequest("username", -1));
+        assertFalse(result.getSuccess());
     }
 
     @Test
-    void fill_fail_userNull() {
+    void fill_fail_userNull() throws BadRequestException {
         clearService.clear();
-
-        FillResult fillResult = fillService.fill(new FillRequest("username", 2));
-
-        assertTrue(fillResult.getMessage().length() > 0);
-        assertFalse(fillResult.getSuccess());
+        FillResult result = fillService.fill(new FillRequest("username", 2));
+        assertFalse(result.getSuccess());
     }
 
 }

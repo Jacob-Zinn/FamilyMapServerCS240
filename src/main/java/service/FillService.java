@@ -12,6 +12,7 @@ import models.Person;
 import models.User;
 import requests.FillRequest;
 import results.FillResult;
+import results.LoginResult;
 import util.ParentGenerationHelper;
 import util.Random;
 
@@ -36,7 +37,7 @@ public class FillService {
      *
      * @return success/failure information
      */
-    public FillResult fill(FillRequest fillRequest) {
+    public FillResult fill(FillRequest fillRequest) throws BadRequestException {
         Database db=new Database();
 
         try {
@@ -44,7 +45,7 @@ public class FillService {
             Connection conn=db.getConnection();
 
             if (fillRequest.getGenerations() < 0 || fillRequest.getGenerations() > 8) {
-                throw new BadRequestException("Specified number of generations is out of bounds");
+                throw new BadRequestException("Error: Specified number of generations is out of bounds");
             }
 
             UserDao userDao=new UserDao(conn);
@@ -53,7 +54,7 @@ public class FillService {
 
             User user=userDao.getUser(fillRequest.getUsername());
             if (user == null) {
-                throw new BadRequestException("Specified user does not exist in db");
+                throw new BadRequestException("Error: Specified user does not exist in db");
             }
             Person person=personDao.getPerson(user.getPersonID(), user.getUsername());
 
@@ -91,11 +92,7 @@ public class FillService {
             db.closeConnection(true);
 
             return new FillResult("Successfully filled db", true);
-        } catch (DataAccessException e) {
-            db.closeConnection(false);
-            e.printStackTrace();
-            return new FillResult("Error occurred while filling db",  false);
-        } catch (BadRequestException e) {
+        } catch (DataAccessException | BadRequestException e) {
             db.closeConnection(false);
             e.printStackTrace();
             return new FillResult(e.getMessage(), false);

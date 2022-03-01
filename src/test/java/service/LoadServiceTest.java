@@ -1,5 +1,6 @@
 package service;
 
+import api.BadRequestException;
 import dao.PersonDao;
 import db.DataAccessException;
 import db.Database;
@@ -29,7 +30,7 @@ class LoadServiceTest {
     }
 
     @Test
-    void load() throws DataAccessException {
+    void load() throws DataAccessException, BadRequestException {
         LoadResult loadResult = loadService.load(loadRequest);
         assertTrue(loadResult.getSuccess());
 
@@ -45,7 +46,7 @@ class LoadServiceTest {
 
 
     @Test
-    void load_fail() {
+    void load_fail() throws BadRequestException {
         LoadResult loadResult = loadService.load(new LoadRequest(null, null, null));
         assertFalse(loadResult.getSuccess());
     }

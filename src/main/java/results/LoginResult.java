@@ -8,7 +8,7 @@ public class LoginResult {
     /**
      * authenticates the request before returning sensitive info
      */
-    private String authToken;
+    private String authtoken;
 
     /**
      * username used in login request
@@ -35,13 +35,13 @@ public class LoginResult {
      *
      * LoginResult constructor instantiating all variables
      *
-     * @param authToken
+     * @param authtoken
      * @param username
      * @param personID
      * @param success
      */
-    public LoginResult(String authToken, String username, String personID, Boolean success) {
-        this.authToken=authToken;
+    public LoginResult(String authtoken, String username, String personID, Boolean success) {
+        this.authtoken = authtoken;
         this.username=username;
         this.personID=personID;
         this.success=success;
@@ -53,12 +53,12 @@ public class LoginResult {
         this.success=success;
     }
 
-    public String getAuthToken() {
-        return authToken;
+    public String getAuthtoken() {
+        return authtoken;
     }
 
-    public void setAuthToken(String authToken) {
-        this.authToken=authToken;
+    public void setAuthtoken(String authtoken) {
+        this.authtoken = authtoken;
     }
 
     public String getUsername() {

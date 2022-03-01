@@ -10,7 +10,7 @@ public class AuthToken {
     /**
      * unique token used for authentication
      */
-    private String authToken;
+    private String authtoken;
 
     /**
      * username associated with the authentication token
@@ -24,7 +24,7 @@ public class AuthToken {
      * @param username
      */
     public AuthToken(String authToken, String username) {
-        this.authToken=authToken;
+        this.authtoken =authToken;
         this.username=username;
     }
 
@@ -33,20 +33,20 @@ public class AuthToken {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthToken authToken=(AuthToken) o;
-        return Objects.equals(AuthToken.this.authToken, authToken.authToken) && Objects.equals(username, authToken.username);
+        return Objects.equals(AuthToken.this.authtoken, authToken.authtoken) && Objects.equals(username, authToken.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(authToken, username);
+        return Objects.hash(authtoken, username);
     }
 
-    public String getAuthtoken() {
-        return authToken;
+    public String getAuthToken() {
+        return authtoken;
     }
 
-    public void setAuthtoken(String authToken) {
-        this.authToken=AuthToken.this.authToken;
+    public void setAuthToken(String authToken) {
+        this.authtoken = authToken;
     }
 
     public String getUsername() {

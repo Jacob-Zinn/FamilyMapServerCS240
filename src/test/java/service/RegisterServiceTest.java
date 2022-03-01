@@ -1,5 +1,6 @@
 package service;
 
+import api.BadRequestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.RegisterRequest;
@@ -37,28 +38,26 @@ class RegisterServiceTest {
     }
 
     @Test
-    void register() {
-
+    void register() throws BadRequestException {
         RegisterResult registerResult = registerService.register(fakeRegisterRequest);
-        assertTrue(registerResult.getAuthToken().length() > 0);
+        assertTrue(registerResult.getAuthtoken().length() > 0);
         assertTrue(registerResult.getPersonID().length() > 0);
         assertEquals("username", registerResult.getUsername());
         assertTrue(registerResult.getSuccess());
-
     }
 
     @Test
-    void register_fail_usernameTaken() {
+    void register_fail_usernameTaken() throws BadRequestException {
         RegisterResult registerResult = registerService.register(fakeRegisterRequest);
         assertTrue(registerResult.getSuccess());
-        RegisterResult failedResult = registerService.register(fakeRegisterRequest);
-        assertFalse(failedResult.getSuccess());
+        RegisterResult result = registerService.register(fakeRegisterRequest);
+        assertFalse(result.getSuccess());
     }
 
     @Test
-    void register_fail_genderIncorrect() {
+    void register_fail_genderIncorrect() throws BadRequestException {
         fakeRegisterRequest.setGender("m/f");
-        RegisterResult registerResult = registerService.register(fakeRegisterRequest);
-        assertFalse(registerResult.getSuccess());
+        RegisterResult result = registerService.register(fakeRegisterRequest);
+        assertFalse(result.getSuccess());
     }
 }

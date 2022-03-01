@@ -10,6 +10,7 @@ import db.Database;
 import models.AuthToken;
 import models.Person;
 import models.User;
+import results.LoginResult;
 import results.RegisterResult;
 import requests.RegisterRequest;
 import util.Random;
@@ -30,7 +31,7 @@ public class RegisterService {
      * @param registerRequest
      * @return authtoken
      */
-    public RegisterResult register(RegisterRequest registerRequest) {
+    public RegisterResult register(RegisterRequest registerRequest) throws BadRequestException {
         Database db = new Database();
 
         try {
@@ -38,9 +39,9 @@ public class RegisterService {
             Connection conn = db.getConnection();
 
             if (registerRequest.getGender().length() != 1) {
-                throw new BadRequestException("gender param not valid");
+                throw new BadRequestException("Error: gender param not valid");
             } else if (registerRequest.getUsername() == null) {
-                throw new BadRequestException("username param not valid");
+                throw new BadRequestException("Error: username param not valid");
             }
 
             // insert authToken
@@ -49,7 +50,7 @@ public class RegisterService {
             try {
                 authTokenDao.insertAuthToken(authToken);
             } catch (DataAccessException e) {
-                throw new BadRequestException("username param not valid");
+                throw new BadRequestException("Error: username param not valid");
             }
 
             // insert new user
@@ -64,7 +65,11 @@ public class RegisterService {
                     registerRequest.getGender(),
                     rootPersonID
             );
-            userDao.insertUser(newUser);
+            try {
+                userDao.insertUser(newUser);
+            } catch (DataAccessException e) {
+                throw new BadRequestException("Error: username already in use");
+            }
 
             // generate root person
             PersonDao personDao = new PersonDao(conn);
@@ -73,13 +78,9 @@ public class RegisterService {
 
             db.closeConnection(true);
 
-            return new RegisterResult(authToken.getAuthtoken(), newUser.getUsername(), newUser.getPersonID(), true);
+            return new RegisterResult(authToken.getAuthToken(), newUser.getUsername(), newUser.getPersonID(), true);
 
-        } catch (DataAccessException e) {
-            db.closeConnection(false);
-            e.printStackTrace();
-            return new RegisterResult("Failed to access db - register service", false);
-        } catch (BadRequestException e) {
+        } catch (DataAccessException | BadRequestException e) {
             db.closeConnection(false);
             e.printStackTrace();
             return new RegisterResult(e.getMessage(), false);

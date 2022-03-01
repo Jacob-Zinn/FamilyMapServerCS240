@@ -1,6 +1,6 @@
 package service;
 
-import org.junit.jupiter.api.AfterEach;
+import api.BadRequestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import requests.FillRequest;
@@ -29,7 +29,7 @@ class EventServiceTest {
     String personID;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws BadRequestException {
         clearService = new ClearService();
         clearService.clear();
 
@@ -38,31 +38,31 @@ class EventServiceTest {
         fillService = new FillService();
 
         RegisterResult registerResult = registerService.register(fakeRegisterRequest);
-        authToken = registerResult.getAuthToken();
+        authToken = registerResult.getAuthtoken();
         personID = registerResult.getPersonID();
         fillService.fill(new FillRequest(fakeRegisterRequest.getUsername(), 1));
     }
 
     @Test
-    void getEvents() {
+    void getEvents() throws BadRequestException {
         EventsResult result = eventService.getEvents(authToken);
         assertEquals(7, result.getData().length);
     }
 
     @Test
-    void getEvents_fail_notAuthorized() {
+    void getEvents_fail_notAuthorized() throws BadRequestException {
         EventsResult result = eventService.getEvents("notanauth");
         assertFalse(result.getSuccess());
     }
 
     @Test
-    void getEvents_fail_nullParam() {
+    void getEvents_fail_nullParam() throws BadRequestException {
         EventsResult result = eventService.getEvents(null);
         assertFalse(result.getSuccess());
     }
 
     @Test
-    void getEvent() {
+    void getEvent() throws BadRequestException {
         EventsResult eventsResult = eventService.getEvents(authToken);
         assertTrue(eventsResult.getData().length > 0);
         String eventID = eventsResult.getData()[1].getEventID();
@@ -72,7 +72,7 @@ class EventServiceTest {
     }
 
     @Test
-    void getEvent_fail_nullParam() {
+    void getEvent_fail_nullParam() throws BadRequestException {
         EventResult result = eventService.getEvent(null, null);
         assertFalse(result.getSuccess());
     }

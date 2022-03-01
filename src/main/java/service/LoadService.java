@@ -14,6 +14,7 @@ import models.User;
 import requests.LoadRequest;
 import results.ClearResult;
 import results.LoadResult;
+import results.LoginResult;
 
 import java.sql.Connection;
 
@@ -29,14 +30,14 @@ public class LoadService {
      * @param loadRequest
      * @return success/failure information
      */
-    public LoadResult load(LoadRequest loadRequest) {
+    public LoadResult load(LoadRequest loadRequest) throws BadRequestException {
         Database db = new Database();
 
         try {
             Connection conn = db.getConnection();
 
             if (loadRequest.getPersons() == null || loadRequest.getUsers() == null || loadRequest.getEvents() == null) {
-                throw new BadRequestException("Invalid params - cannot load data");
+                throw new BadRequestException("Error: Invalid params - cannot load data");
             }
 
             // clearing data from api
@@ -63,12 +64,8 @@ public class LoadService {
             db.closeConnection(true);
 
             return new LoadResult("Successfully loaded data into db", true);
-        } catch (DataAccessException e) {
+        }  catch (DataAccessException | BadRequestException e) {
             db.closeConnection(false);
-            return new LoadResult("Failed to load data into db", false);
-        } catch (BadRequestException e) {
-            db.closeConnection(false);
-            e.printStackTrace();
             return new LoadResult(e.getMessage(), false);
         }
     }

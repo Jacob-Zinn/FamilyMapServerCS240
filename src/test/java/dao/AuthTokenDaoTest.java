@@ -34,7 +34,7 @@ class AuthTokenDaoTest {
     @Test
     void insertAuthTokenPass() throws DataAccessException {
         authTokenDao.insertAuthToken(fakeAuthToken);
-        AuthToken compareTest=authTokenDao.getAuthToken(fakeAuthToken.getAuthtoken());
+        AuthToken compareTest=authTokenDao.getAuthToken(fakeAuthToken.getAuthToken());
         assertNotNull(compareTest);
         assertEquals(fakeAuthToken, compareTest);
     }
@@ -48,20 +48,20 @@ class AuthTokenDaoTest {
     @Test
     void getAuthTokenPass() throws DataAccessException {
         authTokenDao.insertAuthToken(fakeAuthToken);
-        AuthToken authTokenReturned=authTokenDao.getAuthToken(fakeAuthToken.getAuthtoken());
+        AuthToken authTokenReturned=authTokenDao.getAuthToken(fakeAuthToken.getAuthToken());
         assertNotNull(authTokenReturned);
         assertEquals(fakeAuthToken, authTokenReturned);
     }
 
     @Test
     void getAuthTokenFail() throws DataAccessException {
-        assertNull(authTokenDao.getAuthToken(fakeAuthToken.getAuthtoken()));
+        assertNull(authTokenDao.getAuthToken(fakeAuthToken.getAuthToken()));
     }
 
     @Test
     void nukeTable() throws DataAccessException {
         authTokenDao.insertAuthToken(fakeAuthToken);
         authTokenDao.nukeTable();
-        assertNull(authTokenDao.getAuthToken(fakeAuthToken.getAuthtoken()));
+        assertNull(authTokenDao.getAuthToken(fakeAuthToken.getAuthToken()));
     }
 }

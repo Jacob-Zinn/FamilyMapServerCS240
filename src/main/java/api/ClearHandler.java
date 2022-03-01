@@ -16,35 +16,33 @@ public class ClearHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
 
-        boolean success = false;
-
         try {
-            if (exchange.getRequestMethod().equalsIgnoreCase("post")) {
+            if (!exchange.getRequestMethod().equalsIgnoreCase("post")) {
+                throw new BadMethodException();
+            }
 
-                ClearService clearService = new ClearService();
-                ClearResult result = clearService.clear();
+            ClearService clearService = new ClearService();
+            ClearResult result = clearService.clear();
 
+            if (result.getSuccess()) {
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-                OutputStream resBody = exchange.getResponseBody();
-
-                Gson gson = new Gson();
-                String jsonResult = gson.toJson(result);
-                IO.writeString(jsonResult, resBody);
-                resBody.close();
-
-                success = true;
-            }
-
-            if (!success) {
+            } else {
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-
-                exchange.getResponseBody().close();
             }
+            OutputStream resBody = exchange.getResponseBody();
+
+            Gson gson = new Gson();
+            String jsonResult = gson.toJson(result);
+            IO.writeString(jsonResult, resBody);
+            resBody.close();
+
         } catch (IOException e) {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
-
             exchange.getResponseBody().close();
-
+            e.printStackTrace();
+        } catch (BadMethodException e) {
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_METHOD, 0);
+            exchange.getResponseBody().close();
             e.printStackTrace();
         }
     }
