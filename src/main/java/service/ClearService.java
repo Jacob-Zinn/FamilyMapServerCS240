@@ -20,9 +20,9 @@ public class ClearService {
      * Deletes ALL data from the database, including user, authtoken, person, and event data
      */
     public ClearResult clear() {
+        Database db=new Database();
 
         try {
-            Database db=new Database();
             Connection conn=db.getConnection();
 
             AuthTokenDao authTokenDao=new AuthTokenDao(conn);
@@ -35,10 +35,12 @@ public class ClearService {
             personDao.nukeTable();
             userDao.nukeTable();
 
+            db.closeConnection(true);
+
             return new ClearResult("Successfully cleared db", true);
         } catch (DataAccessException e) {
+            db.closeConnection(false);
             return new ClearResult("Failed to clear db",false);
-
         }
     }
 }

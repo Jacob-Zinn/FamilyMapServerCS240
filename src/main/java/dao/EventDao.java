@@ -4,6 +4,8 @@ import db.DataAccessException;
 import models.Event;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Interacts with events table
@@ -13,7 +15,7 @@ public class EventDao {
     private final Connection conn;
 
     public EventDao(Connection conn) {
-        this.conn=conn;
+        this.conn = conn;
     }
 
     /**
@@ -50,15 +52,16 @@ public class EventDao {
     /**
      * @return a single event with the specified eventId
      */
-    public Event getEvent(String eventID) throws DataAccessException {
+    public Event getEvent(String eventID, String associatedUsername) throws DataAccessException {
         Event event;
         ResultSet rs;
-        String sql="SELECT * FROM event WHERE eventID = ?;";
-        try (PreparedStatement stmt=conn.prepareStatement(sql)) {
+        String sql = "SELECT * FROM event WHERE eventID = ? AND associatedUsername = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, eventID);
-            rs=stmt.executeQuery();
+            stmt.setString(2, associatedUsername);
+            rs = stmt.executeQuery();
             if (rs.next()) {
-                event=new Event(rs.getString("eventID"), rs.getString("associatedUsername"),
+                event = new Event(rs.getString("eventID"), rs.getString("associatedUsername"),
                         rs.getString("personID"), rs.getFloat("latitude"), rs.getFloat("longitude"),
                         rs.getString("country"), rs.getString("city"), rs.getString("eventType"),
                         rs.getInt("year"));
@@ -75,19 +78,37 @@ public class EventDao {
     /**
      * @return all of the events in event table associated with given authToken
      */
-    public Event[] getEvents() throws DataAccessException {
-        Event[] eventsArray={new Event()};
-        return eventsArray;
+    public Event[] getEvents(String associatedUsername) throws DataAccessException {
+        List<Event> events = new ArrayList<>();
+        ResultSet rs;
+        String sql = "SELECT * FROM event WHERE associatedUsername = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, associatedUsername);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                events.add(new Event(rs.getString("eventID"), rs.getString("associatedUsername"),
+                        rs.getString("personID"), rs.getFloat("latitude"), rs.getFloat("longitude"),
+                        rs.getString("country"), rs.getString("city"), rs.getString("eventType"),
+                        rs.getInt("year")));
+            }
+            Event[] eventsArray = new Event[events.size()];
+            eventsArray = events.toArray(eventsArray);
+
+            return eventsArray;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding an event in the database");
+        }
     }
 
     /**
      * removes all entries from the event table associated to username
      */
     public void deleteEventsForUser(String username) throws DataAccessException {
-        String sql= "DELETE FROM event WHERE associatedUsername = ?;";
-        try (PreparedStatement stmt=conn.prepareStatement(sql)) {
+        String sql = "DELETE FROM event WHERE associatedUsername = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
-            stmt.executeQuery();
+            stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException("SQL Error encountered while clearing entries for user");
         }

@@ -3,8 +3,10 @@ package api;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import requests.FillRequest;
 import requests.RegisterRequest;
 import results.RegisterResult;
+import service.FillService;
 import service.RegisterService;
 import util.IO;
 
@@ -26,7 +28,7 @@ public class RegisterHandler implements HttpHandler {
 
                 // creating request object
                 InputStream reqBody=exchange.getRequestBody();
-                String reqData=readString(reqBody);
+                String reqData=IO.readString(reqBody);
                 System.out.println(reqData);
 
                 // transforming json to model
@@ -36,6 +38,11 @@ public class RegisterHandler implements HttpHandler {
                 // performing action
                 RegisterService service=new RegisterService();
                 RegisterResult result=service.register(request);
+
+                // generating ancestry
+                FillService fillService = new FillService();
+                FillRequest fillRequest = new FillRequest(result.getUsername());
+                fillService.fill(fillRequest);
 
                 // sending response
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
@@ -54,24 +61,10 @@ public class RegisterHandler implements HttpHandler {
             }
         } catch (IOException e) {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
-
             exchange.getResponseBody().close();
-
             e.printStackTrace();
         }
     }
 
-    /*
-            The readString method shows how to read a String from an InputStream.
-    */
-    private String readString(InputStream is) throws IOException {
-        StringBuilder sb=new StringBuilder();
-        InputStreamReader sr=new InputStreamReader(is);
-        char[] buf=new char[1024];
-        int len;
-        while ((len=sr.read(buf)) > 0) {
-            sb.append(buf, 0, len);
-        }
-        return sb.toString();
-    }
+
 }

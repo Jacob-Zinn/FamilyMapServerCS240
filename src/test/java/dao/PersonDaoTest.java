@@ -38,7 +38,7 @@ class PersonDaoTest {
     @Test
     void insertPersonPass() throws DataAccessException {
         personDao.insertPerson(fakePerson);
-        Person compareTest=personDao.getPerson(fakePerson.getPersonID());
+        Person compareTest=personDao.getPerson(fakePerson.getPersonID(), fakePerson.getAssociatedUsername());
         assertNotNull(compareTest);
         assertEquals(fakePerson, compareTest);
     }
@@ -52,25 +52,36 @@ class PersonDaoTest {
     @Test
     void getPersonPass() throws DataAccessException {
         personDao.insertPerson(fakePerson);
-        Person personReturned=personDao.getPerson(fakePerson.getPersonID());
+        Person personReturned=personDao.getPerson(fakePerson.getPersonID(), fakePerson.getAssociatedUsername());
         assertNotNull(personReturned);
         assertEquals(fakePerson, personReturned);
     }
 
     @Test
     void getPersonFail() throws DataAccessException {
-        assertNull(personDao.getPerson(fakePerson.getPersonID()));
+        assertNull(personDao.getPerson(fakePerson.getPersonID(), fakePerson.getAssociatedUsername()));
     }
 
     @Test
-    void getPersons() {
+    void getPersons() throws DataAccessException {
+        personDao.insertPerson(fakePerson);
+        fakePerson.setPersonID(";laksjdf;lasdj");
+        personDao.insertPerson(fakePerson);
+        Person[] persons = personDao.getPersons("jacobzinn");
+        assertEquals(2, persons.length);
+    }
+
+    @Test
+    void getPersons_noValidPersons() throws DataAccessException {
+        Person[] persons = personDao.getPersons("jacobzinn");
+        assertEquals(0, persons.length);
     }
 
     @Test
     void nukeTable() throws DataAccessException {
         personDao.insertPerson(fakePerson);
         personDao.nukeTable();
-        assertNull(personDao.getPerson(fakePerson.getPersonID()));
+        assertNull(personDao.getPerson(fakePerson.getPersonID(), fakePerson.getAssociatedUsername()));
     }
 
 

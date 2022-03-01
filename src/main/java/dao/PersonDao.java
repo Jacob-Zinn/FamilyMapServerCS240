@@ -1,9 +1,13 @@
 package dao;
 
 import db.DataAccessException;
+import models.Event;
 import models.Person;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Interacts with person table
@@ -47,12 +51,13 @@ public class PersonDao {
     /**
      * @return a single person with the specified personId
      */
-    public Person getPerson(String personID) throws DataAccessException {
+    public Person getPerson(String personID, String associatedUsername) throws DataAccessException {
         Person person;
         ResultSet rs;
-        String sql="SELECT * FROM person WHERE personID = ?;";
+        String sql="SELECT * FROM person WHERE personID = ? AND associatedUsername = ?;";
         try (PreparedStatement stmt=conn.prepareStatement(sql)) {
             stmt.setString(1, personID);
+            stmt.setString(2, associatedUsername);
             rs=stmt.executeQuery();
             if (rs.next()) {
                 person=new Person(rs.getString("personID"), rs.getString("associatedUsername"),
@@ -71,21 +76,39 @@ public class PersonDao {
     /**
      * @return all of the persons in person table
      */
-    public Person[] getPersons() throws DataAccessException {
-        Person[] personsArray={new Person()};
-        return personsArray;
+    public Person[] getPersons(String associatedUsername) throws DataAccessException {
+        List<Person> persons = new ArrayList<>();
+        ResultSet rs;
+        String sql="SELECT * FROM person WHERE associatedUsername = ?;";
+        try (PreparedStatement stmt=conn.prepareStatement(sql)) {
+            stmt.setString(1, associatedUsername);
+            rs=stmt.executeQuery();
+            while (rs.next()) {
+                persons.add(new Person(rs.getString("personID"), rs.getString("associatedUsername"),
+                        rs.getString("firstName"), rs.getString("lastName"), rs.getString("gender"),
+                        rs.getString("fatherID"), rs.getString("motherID"), rs.getString("spouseID"))
+                );
+            }
+            Person[] personsArray = new Person[persons.size()];
+            personsArray = persons.toArray(personsArray);
+
+            return personsArray;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding an person in the database");
+        }
     }
 
     /**
      * removes all entries from the person table associated to username
      */
-    public void deleteEventsForUser(String username) throws DataAccessException {
+    public void deletePersonsForUser(String username) throws DataAccessException {
         String sql= "DELETE FROM person WHERE associatedUsername = ?;";
         try (PreparedStatement stmt=conn.prepareStatement(sql)) {
             stmt.setString(1, username);
-            stmt.executeQuery();
+            stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DataAccessException("SQL Error encountered while clearing entries for user");
+            throw new DataAccessException("SQL Error encountered while clearing persons for user");
         }
     }
 

@@ -1,6 +1,7 @@
 package service;
 
 
+import api.BadRequestException;
 import dao.EventDao;
 import dao.PersonDao;
 import dao.UserDao;
@@ -10,13 +11,11 @@ import models.Event;
 import models.Person;
 import models.User;
 import requests.FillRequest;
-import requests.LoadRequest;
 import results.FillResult;
 import util.ParentGenerationHelper;
 import util.Random;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 
 /**
  * Contains methods used to fill database given correct user path
@@ -38,37 +37,47 @@ public class FillService {
      * @return success/failure information
      */
     public FillResult fill(FillRequest fillRequest) {
+        Database db=new Database();
 
         try {
             // init db
-            Database db=new Database();
             Connection conn=db.getConnection();
+
+            if (fillRequest.getGenerations() < 0 || fillRequest.getGenerations() > 8) {
+                throw new BadRequestException("Specified number of generations is out of bounds");
+            }
+
             UserDao userDao=new UserDao(conn);
             PersonDao personDao=new PersonDao(conn);
             EventDao eventDao=new EventDao(conn);
 
             User user=userDao.getUser(fillRequest.getUsername());
-            Person person=personDao.getPerson(user.getPersonID());
+            if (user == null) {
+                throw new BadRequestException("Specified user does not exist in db");
+            }
+            Person person=personDao.getPerson(user.getPersonID(), user.getUsername());
 
             // create object to collect all recursively generated people and events
-            ParentGenerationHelper parentGenerationHelper=new ParentGenerationHelper();
+            ParentGenerationHelper parentGenerationHelper=new ParentGenerationHelper(fillRequest.getGenerations());
 
-            // linking parent and child
-            String newFatherID = Random.generateUUID();
-            String newMotherID = Random.generateUUID();
-            person.setFatherID(newFatherID);
-            person.setMotherID(newMotherID);
+            // root user will be deleted from db below, so making sure root user person gets added back (with the appropriate parent ids)
+            parentGenerationHelper.addPerson(person);
 
-            // mother father marriage sync
-            Event parentMarriageEvent = Event.generateRandomEvent(person, 1990, Event.EventType.marriage);
-            parentGenerationHelper.addEvent(parentMarriageEvent);
+            // creating birth event for root person
+            Event rootUserBirthEvent = Event.generateRandomEvent(person, 2001, Event.EventType.birth);
+            parentGenerationHelper.addEvent(rootUserBirthEvent);
+
+            // mother father marriage and spouse sync
+            Event parentMarriageEvent = Event.generateRandomEvent(person, 2000, Event.EventType.marriage);
+            String fatherID = Random.generateUUID();
+            String motherID = Random.generateUUID();
 
             // start generating ancestry and events (recursive)
-            person.generateParent(person.getAssociatedUsername(), 1, fillRequest.getGenerations(), newFatherID, true, parentGenerationHelper, parentMarriageEvent);
-            person.generateParent(person.getAssociatedUsername(), 1,  fillRequest.getGenerations(), newMotherID, false, parentGenerationHelper, parentMarriageEvent);
+            person.generateParent(fatherID, motherID, 0, true, parentGenerationHelper, parentMarriageEvent);
+            person.generateParent(motherID, fatherID,0, false, parentGenerationHelper, parentMarriageEvent);
 
             // clearing data associated with username
-            personDao.deleteEventsForUser(fillRequest.getUsername());
+            personDao.deletePersonsForUser(fillRequest.getUsername());
             eventDao.deleteEventsForUser(fillRequest.getUsername());
 
             // populate db
@@ -79,10 +88,17 @@ public class FillService {
                 eventDao.insertEvent(dbEvent);
             }
 
+            db.closeConnection(true);
+
             return new FillResult("Successfully filled db", true);
         } catch (DataAccessException e) {
+            db.closeConnection(false);
             e.printStackTrace();
             return new FillResult("Error occurred while filling db",  false);
+        } catch (BadRequestException e) {
+            db.closeConnection(false);
+            e.printStackTrace();
+            return new FillResult(e.getMessage(), false);
         }
     }
 

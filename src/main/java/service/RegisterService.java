@@ -1,6 +1,7 @@
 package service;
 
 
+import api.BadRequestException;
 import dao.AuthTokenDao;
 import dao.PersonDao;
 import dao.UserDao;
@@ -9,7 +10,6 @@ import db.Database;
 import models.AuthToken;
 import models.Person;
 import models.User;
-import requests.FillRequest;
 import results.RegisterResult;
 import requests.RegisterRequest;
 import util.Random;
@@ -31,15 +31,26 @@ public class RegisterService {
      * @return authtoken
      */
     public RegisterResult register(RegisterRequest registerRequest) {
+        Database db = new Database();
+
         try {
             // init db
-            Database db=new Database();
-            Connection conn=db.getConnection();
+            Connection conn = db.getConnection();
+
+            if (registerRequest.getGender().length() != 1) {
+                throw new BadRequestException("gender param not valid");
+            } else if (registerRequest.getUsername() == null) {
+                throw new BadRequestException("username param not valid");
+            }
 
             // insert authToken
             AuthTokenDao authTokenDao=new AuthTokenDao(conn);
             AuthToken authToken = new AuthToken(Random.generateUUID(), registerRequest.getUsername());
-            authTokenDao.insertAuthToken(authToken);
+            try {
+                authTokenDao.insertAuthToken(authToken);
+            } catch (DataAccessException e) {
+                throw new BadRequestException("username param not valid");
+            }
 
             // insert new user
             UserDao userDao=new UserDao(conn);
@@ -57,18 +68,21 @@ public class RegisterService {
 
             // generate root person
             PersonDao personDao = new PersonDao(conn);
-            personDao.insertPerson(Person.generateRandomPerson(newUser.getUsername(), true, rootPersonID));
+            Person newPerson = new Person(rootPersonID, newUser.getUsername(), registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getGender());
+            personDao.insertPerson(newPerson);
 
-            // generate new user data
-            FillRequest fillRequest = new FillRequest(registerRequest.getUsername());
-            FillService fillService = new FillService();
-            fillService.fill(fillRequest);
+            db.closeConnection(true);
 
             return new RegisterResult(authToken.getAuthtoken(), newUser.getUsername(), newUser.getPersonID(), true);
 
         } catch (DataAccessException e) {
+            db.closeConnection(false);
             e.printStackTrace();
-            return new RegisterResult("Failed to access db", false);
+            return new RegisterResult("Failed to access db - register service", false);
+        } catch (BadRequestException e) {
+            db.closeConnection(false);
+            e.printStackTrace();
+            return new RegisterResult(e.getMessage(), false);
         }
 
     }

@@ -1,8 +1,21 @@
 package service;
 
 
+import api.BadRequestException;
+import dao.AuthTokenDao;
+import dao.EventDao;
+import dao.PersonDao;
+import dao.UserDao;
+import db.DataAccessException;
+import db.Database;
+import models.Event;
+import models.Person;
+import models.User;
 import requests.LoadRequest;
+import results.ClearResult;
 import results.LoadResult;
+
+import java.sql.Connection;
 
 /**
  * contains method to load information into database
@@ -17,7 +30,47 @@ public class LoadService {
      * @return success/failure information
      */
     public LoadResult load(LoadRequest loadRequest) {
-        return new LoadResult("Error",false);
+        Database db = new Database();
+
+        try {
+            Connection conn = db.getConnection();
+
+            if (loadRequest.getPersons() == null || loadRequest.getUsers() == null || loadRequest.getEvents() == null) {
+                throw new BadRequestException("Invalid params - cannot load data");
+            }
+
+            // clearing data from api
+            AuthTokenDao authTokenDao = new AuthTokenDao(conn);
+            EventDao eventDao = new EventDao(conn);
+            PersonDao personDao = new PersonDao(conn);
+            UserDao userDao = new UserDao(conn);
+
+            authTokenDao.nukeTable();
+            eventDao.nukeTable();
+            personDao.nukeTable();
+            userDao.nukeTable();
+
+            for (User user : loadRequest.getUsers()) {
+                userDao.insertUser(user);
+            }
+            for (Person person : loadRequest.getPersons()) {
+                personDao.insertPerson(person);
+            }
+            for (Event event : loadRequest.getEvents()) {
+                eventDao.insertEvent(event);
+            }
+
+            db.closeConnection(true);
+
+            return new LoadResult("Successfully loaded data into db", true);
+        } catch (DataAccessException e) {
+            db.closeConnection(false);
+            return new LoadResult("Failed to load data into db", false);
+        } catch (BadRequestException e) {
+            db.closeConnection(false);
+            e.printStackTrace();
+            return new LoadResult(e.getMessage(), false);
+        }
     }
 
 }

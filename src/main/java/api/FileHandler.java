@@ -14,7 +14,6 @@ public class FileHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
 
-
         try {
             if (exchange.getRequestMethod().equalsIgnoreCase("get")) {
 

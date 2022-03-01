@@ -69,7 +69,7 @@ public class PersonHandler implements HttpHandler {
             }
 
             if (!success) {
-                throw new BadRequestException("error: bad request");
+                throw new BadRequestException("error: bad request in personHandler");
             }
         }
         catch (IOException e) {
