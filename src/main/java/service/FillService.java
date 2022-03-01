@@ -91,7 +91,7 @@ public class FillService {
 
             db.closeConnection(true);
 
-            return new FillResult("Successfully filled db", true);
+            return new FillResult("Successfully added " + parentGenerationHelper.getPersons().size() + " persons and " + parentGenerationHelper.getEvents().size() + " events to the database.", true);
         } catch (DataAccessException | BadRequestException e) {
             db.closeConnection(false);
             e.printStackTrace();

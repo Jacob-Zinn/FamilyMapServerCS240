@@ -33,6 +33,9 @@ public class FileHandler implements HttpHandler {
                 Files.copy(file.toPath(), respBody);
             } else {
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_NOT_FOUND, 0);
+                File notFoundFile = new File("web/HTML/404.html");
+                OutputStream respBody = exchange.getResponseBody();
+                Files.copy(notFoundFile.toPath(), respBody);
             }
             exchange.getResponseBody().close();
 

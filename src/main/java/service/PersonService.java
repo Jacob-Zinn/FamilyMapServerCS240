@@ -41,6 +41,9 @@ public class PersonService {
 
             PersonDao personDao = new PersonDao(conn);
             Person person = personDao.getPerson(personID, userToken.getUsername());
+            if (person == null) {
+                throw new BadRequestException("Error: person does not exist for associated username");
+            }
 
             db.closeConnection(true);
 

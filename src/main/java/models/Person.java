@@ -84,11 +84,17 @@ public class Person {
 
     public void generateParent(String parentID, String spouseID, int generation, Boolean isFather, ParentGenerationHelper parentGenerationHelper, Event marriageEvent) {
 
+
+
         if (generation < parentGenerationHelper.getTargetNumGenerations()) {
 
             // creating parent
             Person parent = generateRandomPerson(associatedUsername, isFather, parentID);
             parentGenerationHelper.addPerson(parent);
+
+            if (spouseID != null) {
+                parent.setSpouseID(spouseID);
+            }
 
             // linking parent and child
             if (isFather) {
@@ -97,17 +103,13 @@ public class Person {
                 this.setMotherID(parentID);
             }
 
-            if (spouseID != null) {
-                parent.setSpouseID(spouseID);
-            }
-
             // generate events
-            parentGenerationHelper.addEvent(Event.generateRandomEvent(this, marriageEvent.getYear() - 20, Event.EventType.birth));
-            parentGenerationHelper.addEvent(Event.generateSyncMarriageEvent(this, marriageEvent.getYear(), marriageEvent.getLatitude(), marriageEvent.getLongitude(), marriageEvent.getCountry(), marriageEvent.getCity()));
-            parentGenerationHelper.addEvent(Event.generateRandomEvent(this, marriageEvent.getYear() + 70, Event.EventType.death));
+            parentGenerationHelper.addEvent(Event.generateRandomEvent(parent, marriageEvent.getYear() - 20, Event.EventType.birth));
+            parentGenerationHelper.addEvent(Event.generateSyncMarriageEvent(parent, marriageEvent.getYear(), marriageEvent.getLatitude(), marriageEvent.getLongitude(), marriageEvent.getCountry(), marriageEvent.getCity()));
+            parentGenerationHelper.addEvent(Event.generateRandomEvent(parent, marriageEvent.getYear() + 70, Event.EventType.death));
 
             // mother father marriage sync
-            Event parentMarriageEvent = Event.generateRandomEvent(this, marriageEvent.getYear() + 20, Event.EventType.marriage);
+            Event parentMarriageEvent = Event.generateRandomEvent(this, marriageEvent.getYear() - 20, Event.EventType.marriage);
             String fatherID = Random.generateUUID();
             String motherID = Random.generateUUID();
 

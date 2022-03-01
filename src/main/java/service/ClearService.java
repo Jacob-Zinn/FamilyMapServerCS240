@@ -37,7 +37,7 @@ public class ClearService {
 
             db.closeConnection(true);
 
-            return new ClearResult("Successfully cleared db", true);
+            return new ClearResult("clear succeeded", true);
         } catch (DataAccessException e) {
             db.closeConnection(false);
             return new ClearResult("Failed to clear db",false);

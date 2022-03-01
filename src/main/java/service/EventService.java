@@ -44,6 +44,9 @@ public class EventService {
 
             EventDao eventDao = new EventDao(conn);
             Event event = eventDao.getEvent(eventID, associatedUsername);
+            if (event == null) {
+                throw new BadRequestException("Error: event does not exist for associated username");
+            }
 
             db.closeConnection(true);
 

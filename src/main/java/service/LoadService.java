@@ -63,7 +63,7 @@ public class LoadService {
 
             db.closeConnection(true);
 
-            return new LoadResult("Successfully loaded data into db", true);
+            return new LoadResult("Successfully added " + loadRequest.getUsers().length + " users, " + loadRequest.getPersons().length + " persons, and " + loadRequest.getEvents().length + " events to the database.", true);
         }  catch (DataAccessException | BadRequestException e) {
             db.closeConnection(false);
             return new LoadResult(e.getMessage(), false);
