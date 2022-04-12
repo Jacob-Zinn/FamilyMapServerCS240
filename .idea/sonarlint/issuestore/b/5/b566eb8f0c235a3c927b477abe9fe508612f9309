@@ -1,0 +1,89 @@
+
+W
+java:S1117ä"@Rename "loginRequest" which hides the field declared at line 45.(ŸœÆ
+O	java:S106¢"9Replace this use of System.out or System.err by a logger.(÷å½¤
+_
+java:S5361‚"HReplace this call to "replaceAll()" by a call to the "replace()" method.(ÔòÏı
+d
+java:S5361ƒ"HReplace this call to "replaceAll()" by a call to the "replace()" method.(Ğ£Óãûÿÿÿÿ
+d
+java:S5361‡"HReplace this call to "replaceAll()" by a call to the "replace()" method.(Ü¹¼ùÿÿÿÿ
+d
+java:S5361ˆ"HReplace this call to "replaceAll()" by a call to the "replace()" method.(Î«Âèıÿÿÿÿ
+d
+java:S5361¢"HReplace this call to "replaceAll()" by a call to the "replace()" method.(€‹ƒ·şÿÿÿÿ
+_
+java:S5361£"HReplace this call to "replaceAll()" by a call to the "replace()" method.(¯úáì
+d
+java:S5361¨"HReplace this call to "replaceAll()" by a call to the "replace()" method.(›´âçûÿÿÿÿ
+_
+java:S5361©"HReplace this call to "replaceAll()" by a call to the "replace()" method.(¹«¢÷
+d
+java:S5361Ã"HReplace this call to "replaceAll()" by a call to the "replace()" method.(™¹¯´øÿÿÿÿ
+d
+java:S5361Ä"HReplace this call to "replaceAll()" by a call to the "replace()" method.(¨€™êûÿÿÿÿ
+d
+java:S5361É"HReplace this call to "replaceAll()" by a call to the "replace()" method.(Õ®šúÿÿÿÿ
+d
+java:S5361Ê"HReplace this call to "replaceAll()" by a call to the "replace()" method.(ğº›¢ıÿÿÿÿ
+O	java:S106ã
+"9Replace this use of System.out or System.err by a logger.(çÌ–
+i	java:S100ü
+"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(÷’¨ ùÿÿÿÿ
+d	java:S100ƒ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Øš³¬
+A
+java:S5960n"+Remove this assertion from production code.(ªşöì
+r
+java:S1192–"[Define a constant instead of duplicating this literal "passoffFiles/LoadData.json" 6 times.(È“§ñ
+a
+java:S1192é	"JDefine a constant instead of duplicating this literal "'s father" 4 times.(£È“
+
+java:S1192Ù"wDefine a constant instead of duplicating this literal "First part of passoffresult message does not match API" 4 times.(Ëï§¡
+‡
+java:S1192Ñ	"qDefine a constant instead of duplicating this literal "'s Father's Person not included in passoffresult" 3 times.(œğé
+™
+java:S1192¶"Define a constant instead of duplicating this literal "message was empty string, should have contained an error message" 6 times.(•…±É
+¶
+java:S1192˜"™Define a constant instead of duplicating this literal "message was null OR its variable name did not match that of the expected JSon (see API)" 12 times.(®ÜĞ”şÿÿÿÿ
+”
+java:S1192İ"xDefine a constant instead of duplicating this literal "Second part of passoffresult message does not match API" 4 times.(æ•½šùÿÿÿÿ
+k
+java:S1192Ù"TDefine a constant instead of duplicating this literal "Successfully added " 4 times.(Ëï§¡
+ˆ
+java:S1192Û	"qDefine a constant instead of duplicating this literal "'s Mother's Person not included in passoffresult" 3 times.(¦ìå»
+~
+java:S1192š"gDefine a constant instead of duplicating this literal "message did not contain 'error' string" 8 times.(ÀÊÙ€
+p
+java:S1192Õ"YDefine a constant instead of duplicating this literal "message was empty string" 4 times.(•ôÌ®
+
+java:S1192‚"eDefine a constant instead of duplicating this literal "'s persons do not match those loaded" 4 times.(ìûÃ–şÿÿÿÿ
+€
+java:S1192€"dDefine a constant instead of duplicating this literal "'s events do not match those loaded" 4 times.(ıŒßÇÿÿÿÿÿ
+|
+java:S1192×"`Define a constant instead of duplicating this literal "(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)" 4 times.(šĞçúÿÿÿÿ
+f
+java:S1192ê	"JDefine a constant instead of duplicating this literal "'s mother" 4 times.(Î­­–úÿÿÿÿ
+±
+java:S1192n"šDefine a constant instead of duplicating this literal "authtoken was null OR its variable name did not match that of the expected JSon (see API)" 4 times.(ªşöì
+t
+java:S1192Û"XDefine a constant instead of duplicating this literal "Not enough people added" 3 times.(µÛªÅøÿÿÿÿ
+^
+java:S1192š"GDefine a constant instead of duplicating this literal "error" 11 times.(ÀÊÙ€
+ƒ
+java:S1192Ã"lDefine a constant instead of duplicating this literal "User's Person not included in passoffresult" 3 times.(»ğ• 
+`
+java:S1192Ì"IDefine a constant instead of duplicating this literal "bad auth" 4 times.(ìÕî¦
+j
+java:S1192İ"NDefine a constant instead of duplicating this literal " persons and " 3 times.(æ•½šùÿÿÿÿ
+t
+java:S1192ß"XDefine a constant instead of duplicating this literal "Not enough events added" 3 times.(È¡Éùÿÿÿÿ
+›
+java:S1192®"Define a constant instead of duplicating this literal "passoffFiles/LoadData.json not found in project root directory" 5 times.(·–ë—øÿÿÿÿ
+œ
+java:S1192p"€Define a constant instead of duplicating this literal "authtoken was empty string, expected non-empty authtoken string" 4 times.(Ä°¼”ùÿÿÿÿ
+^
+java:S2184É"BCast one of the operands of this addition operation to a "double".(À½‘¢øÿÿÿÿ
+^
+java:S2184ñ"BCast one of the operands of this addition operation to a "double".(À½‘¢øÿÿÿÿ
+^
+java:S2184™"BCast one of the operands of this addition operation to a "double".(À½‘¢øÿÿÿÿ

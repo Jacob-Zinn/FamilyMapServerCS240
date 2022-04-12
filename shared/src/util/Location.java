@@ -10,15 +10,20 @@ public class Location {
             new Location(51.1f, -87.4f, "Canada", "Ontario"),
             new Location(45.1f, -71.4f, "Canada", "Quebec"),
             new Location(42.1f, -75.4f, "United States", "New York"),
-            new Location(48.1f, 3.7f, "France", "Canton De Huriel")
+            new Location(48.1f, 3.7f, "France", "Canton De Huriel"),
+            new Location(43.9f, -114f, "United States", "Boise"),
+            new Location(48.85f, 2.459f, "France", "Paris"),
+            new Location(52.1f, -.71f, "United Kingdom", "London"),
+            new Location(33.4f, -78.86f, "United States", "Myrtle Beach"),
+            new Location(40.6f, -74.2f, "United States", "Philadelphia")
     };
 
-    private Float lon;
     private Float lat;
+    private Float lon;
     private String country;
     private String city;
 
-    public Location(Float lon, Float lat, String country, String city) {
+    public Location(Float lat, Float lon, String country, String city) {
         this.lon=lon;
         this.lat=lat;
         this.country=country;
